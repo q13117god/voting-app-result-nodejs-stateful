@@ -1,0 +1,30 @@
+apiVersion: skaffold/v1beta2
+kind: Config
+build:
+  artifacts:
+  - image: changeme
+    context: .
+    docker: {}
+  tagPolicy:
+    envTemplate:
+      template: '{{.DOCKER_REGISTRY}}/q13117god/voting-app-result-nodejs-stateful:{{.VERSION}}'
+  local: {}
+deploy:
+  kubectl: {}
+profiles:
+- name: dev
+  build:
+    artifacts:
+    - docker: {}
+    tagPolicy:
+      envTemplate:
+        template: '{{.DOCKER_REGISTRY}}/q13117god/voting-app-result-nodejs-stateful:{{.DIGEST_HEX}}'
+    local: {}
+  deploy:
+    helm:
+      releases:
+      - name: voting-app-result-nodejs-stateful
+        chartPath: charts/voting-app-result-nodejs-stateful
+        setValueTemplates:
+          image.repository: '{{.DOCKER_REGISTRY}}/q13117god/voting-app-result-nodejs-stateful'
+          image.tag: '{{.DIGEST_HEX}}'
