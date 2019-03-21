@@ -27,9 +27,10 @@ async.retry(
   {times: 10, interval: 1000},
   function(callback) {
     var connection = mysql.createConnection({
-        host     : 'mysql-multimaster-cluster',
+        host     : 'mysql-multimaster-cluster-0.mysql-multimaster-cluster.jx-staging.svc.cluster.local',
         user     : 'root',
-        password : '1vJg42xltSjSF5Mh'
+        password : '1vJg42xltSjSF5Mh',
+        database : 'votes'
     });
     connection.connect(function(err,client) {
       if (err) {
