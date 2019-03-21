@@ -32,11 +32,17 @@ async.retry(
         password : '1vJg42xltSjSF5Mh',
         database : 'votes'
     });
+    connection.connect();
+
+    connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+    if (error) throw error;
+    console.log('The solution is: ', results[0].solution);
+    });
+    
     connection.connect(function(err,client) {
       if (err) {
         console.error("Waiting for Stateful mysql-multimaster-cluster db on 03/21/2019");
       }
-      console.error("Get here for Stateful mysql-multimaster-cluster db on 03/21/2019");
       callback(err, client);
     });
   },
