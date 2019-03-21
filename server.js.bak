@@ -1,8 +1,6 @@
 var express = require('express'),
     async = require('async'),
     pg = require("pg"),
-    mysql = require("mysql"),
-    client = mysql.createConnection('mysql://root:1vJg42xltSjSF5Mh@mysql-multimaster-cluster/votes'),
     path = require("path"),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
@@ -27,9 +25,9 @@ io.sockets.on('connection', function (socket) {
 async.retry(
   {times: 1000, interval: 1000},
   function(callback) {
-    client.connect(function(err) {
+    pg.connect('postgres://postgres@db-statefulset-replica/postgres', function(err, client, done) {
       if (err) {
-        console.error("Waiting for Stateful mysql-multimaster-cluster db on 03/21/2019");
+        console.error("Waiting for Stateful PostGreSQL Replica db");
       }
       callback(err, client);
     });
@@ -38,13 +36,13 @@ async.retry(
     if (err) {
       return console.error("Giving up");
     }
-    console.log("Connected to Stateful mysql-multimaster-cluster db on 03/21/2019");
+    console.log("Connected to Stateful PostGreSQL Replica db");
     getVotes(client);
   }
 );
 
 function getVotes(client) {
-  client.query('SELECT vote, COUNT(id) AS count FROM votes.votes GROUP BY vote', [], function(err, result) {
+  client.query('SELECT vote, COUNT(id) AS count FROM votes GROUP BY vote', [], function(err, result) {
     if (err) {
       console.error("Error performing query: " + err);
     } else {
