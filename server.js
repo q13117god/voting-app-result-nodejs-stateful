@@ -26,11 +26,17 @@ io.sockets.on('connection', function (socket) {
 async.retry(
   {times: 1000, interval: 1000},
   function(callback) {
-    var connection = mysql.createConnection('mysql://root:1vJg42xltSjSF5Mh@mysql-multimaster-cluster/votes');
-    connection.connect(function(err,client) {
+    var connection = mysql.createConnection({
+        host     : 'mysql-multimaster-cluster',
+        user     : 'root',
+        password : '1vJg42xltSjSF5Mh',
+        database : 'votes'
+    });
+    connection.connect(function(err) {
       if (err) {
         console.error("Waiting for Stateful mysql-multimaster-cluster db on 03/21/2019");
       }
+      console.error("Get here for Stateful mysql-multimaster-cluster db on 03/21/2019");
       callback(err, client);
     });
   },
