@@ -24,13 +24,12 @@ io.sockets.on('connection', function (socket) {
 });
 
 async.retry(
-  {times: 1000, interval: 1000},
+  {times: 10, interval: 1000},
   function(callback) {
     var connection = mysql.createConnection({
         host     : 'mysql-multimaster-cluster',
         user     : 'root',
-        password : '1vJg42xltSjSF5Mh',
-        database : 'votes'
+        password : '1vJg42xltSjSF5Mh'
     });
     connection.connect(function(err,client) {
       if (err) {
