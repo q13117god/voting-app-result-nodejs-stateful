@@ -32,7 +32,7 @@ async.retry(
         password : '1vJg42xltSjSF5Mh',
         database : 'votes'
     });
-    connection.connect(function(err) {
+    connection.connect(function(err,client) {
       if (err) {
         console.error("Waiting for Stateful mysql-multimaster-cluster db on 03/21/2019");
       }
