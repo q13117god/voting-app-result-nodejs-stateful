@@ -1,8 +1,7 @@
 var express = require('express'),
     async = require('async'),
     pg = require("pg"),
-    mysql = require("mysql"),
-    connection = mysql.createConnection('mysql://root:1vJg42xltSjSF5Mh@mysql-multimaster-cluster/votes'),
+    mysql = require('mysql'),
     path = require("path"),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
@@ -27,6 +26,7 @@ io.sockets.on('connection', function (socket) {
 async.retry(
   {times: 1000, interval: 1000},
   function(callback) {
+    var connection = mysql.createConnection('mysql://root:1vJg42xltSjSF5Mh@mysql-multimaster-cluster/votes');
     connection.connect(function(err,client) {
       if (err) {
         console.error("Waiting for Stateful mysql-multimaster-cluster db on 03/21/2019");
