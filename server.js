@@ -29,12 +29,10 @@ async.retry(
   function(callback) {
     const connection2 = mysql2.createConnection({
           host     : 'mysql-multimaster-cluster-0.mysql-multimaster-cluster.jx-staging.svc.cluster.local',
-          user     : 'root',
-          password : '1vJg42xltSjSF5Mh',
+          user     : 'foo',
+          password : 'MyNewPass',
           database : 'votes'
     });
-
-    connection2.connect();
 
     connection2.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
     if (error) throw error;
@@ -43,8 +41,8 @@ async.retry(
 
     var connection = mysql.createConnection({
         host     : 'mysql-multimaster-cluster-0.mysql-multimaster-cluster.jx-staging.svc.cluster.local',
-        user     : 'root',
-        password : '1vJg42xltSjSF5Mh',
+        user     : 'foo',
+        password : 'MyNewPass',
         database : 'votes'
     });
     
