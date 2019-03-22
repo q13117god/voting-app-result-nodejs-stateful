@@ -24,10 +24,10 @@ io.sockets.on('connection', function (socket) {
 });
 
 async.retry(
-  {times: 100, interval: 1000},
+  {times: 1000, interval: 1000},
   function(callback) {
     var connection = mysql.createConnection({
-        host     : 'mysql-multimaster-cluster-0.mysql-multimaster-cluster.jx-staging.svc.cluster.local',
+        host     : 'mysql-multimaster-cluster',
         user     : 'foo',
         password : 'MyNewPass',
         database : 'votes'
@@ -55,7 +55,6 @@ function getVotes(client) {
     if (err) {
       console.error("Error performing query: " + err);
     } else {
-      console.log(result);
       var votes = collectVotesFromResult(result);
       io.sockets.emit("scores", JSON.stringify(votes));
     }
