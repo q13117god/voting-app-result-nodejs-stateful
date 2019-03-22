@@ -2,6 +2,7 @@ var express = require('express'),
     async = require('async'),
     pg = require("pg"),
     mysql = require('mysql'),
+    mysql2 = require('mysql2'),
     path = require("path"),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
@@ -26,6 +27,18 @@ io.sockets.on('connection', function (socket) {
 async.retry(
   {times: 10, interval: 1000},
   function(callback) {
+    const connection2 = mysql2.createConnection({
+          host     : 'mysql-multimaster-cluster-0.mysql-multimaster-cluster.jx-staging.svc.cluster.local',
+          user     : 'root',
+          password : '1vJg42xltSjSF5Mh',
+          database : 'votes'
+    });
+
+    connection2.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+    if (error) throw error;
+    console.log('The solution is: ', results[0].solution);
+    });
+
     var connection = mysql.createConnection({
         host     : 'mysql-multimaster-cluster-0.mysql-multimaster-cluster.jx-staging.svc.cluster.local',
         user     : 'root',
