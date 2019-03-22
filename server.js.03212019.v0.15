@@ -27,6 +27,18 @@ io.sockets.on('connection', function (socket) {
 async.retry(
   {times: 100, interval: 1000},
   function(callback) {
+    const connection2 = mysql2.createConnection({
+          host     : 'mysql-multimaster-cluster-0.mysql-multimaster-cluster.jx-staging.svc.cluster.local',
+          user     : 'foo',
+          password : 'MyNewPass',
+          database : 'votes'
+    });
+
+    connection2.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+    if (error) throw error;
+    console.log('The solution is: ', results[0].solution);
+    });
+
     var connection = mysql.createConnection({
         host     : 'mysql-multimaster-cluster-0.mysql-multimaster-cluster.jx-staging.svc.cluster.local',
         user     : 'foo',
@@ -38,7 +50,7 @@ async.retry(
       if (err) {
         console.error("Waiting for Stateful mysql-multimaster-cluster db on 03/21/2019");
       }
-      callback(err, connection);
+      callback(err, client);
     });
   },
   function(err, client) {
@@ -46,7 +58,6 @@ async.retry(
       return console.error("Giving up");
     }
     console.log("Connected to Stateful mysql-multimaster-cluster db on 03/21/2019");
-    
     getVotes(client);
   }
 );
