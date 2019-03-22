@@ -25,7 +25,7 @@ io.sockets.on('connection', function (socket) {
 });
 
 async.retry(
-  {times: 10, interval: 1000},
+  {times: 100, interval: 1000},
   function(callback) {
     const connection2 = mysql2.createConnection({
           host     : 'mysql-multimaster-cluster-0.mysql-multimaster-cluster.jx-staging.svc.cluster.local',
@@ -33,6 +33,8 @@ async.retry(
           password : '1vJg42xltSjSF5Mh',
           database : 'votes'
     });
+
+    connection2.connect();
 
     connection2.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
     if (error) throw error;
@@ -44,12 +46,6 @@ async.retry(
         user     : 'root',
         password : '1vJg42xltSjSF5Mh',
         database : 'votes'
-    });
-    connection.connect();
-
-    connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-    if (error) throw error;
-    console.log('The solution is: ', results[0].solution);
     });
     
     connection.connect(function(err,client) {
